@@ -1,12 +1,10 @@
+//initialize express
 const express = require('express');
 const router = express.Router();
 const Student = require('../model/student');
-const { default: mongoose } = require('mongoose');
-const student = require('../model/student');
 
 //POST or Create
 router.post('/', async (req, res, next) => {
-    //console.log(req.body.address);
     const student = new Student({
         name:req.body.name,
         email:req.body.email,
@@ -32,24 +30,6 @@ router.post('/', async (req, res, next) => {
         })
     }
 });
-router.put('/:id', async (req, res, next) => {
-    try{
-        //const userId = await Student.findById(req.params.id);
-        //console.log(userId);
-        const insertStudentAddress = await Student.findByIdAndUpdate({_id: req.params.id}, req.body);
-        if(insertStudentAddress){
-            res.status(200).json({
-                id: userId,
-                newAddress: insertStudentAddress
-            })
-        }
-    }catch (error){
-        res.status(500).json({
-            error: error
-        })
-    }
-    
-})
 
 //GET or Read
 router.get('/', (req, res, next) => {
@@ -81,19 +61,19 @@ router.get('/:id', (req, res, next) => {
 })
 
 //PUT or Update
-// router.put('/:id', (req, res, next) => {
-//     Student.findByIdAndUpdate({_id:req.params.id}, req.body)
-//     .then(result => {
-//         res.status(200).json({
-//             message:'success'
-//         })
-//     })
-//     .catch(err => {
-//         res.status(500).json({
-//             error:err
-//         })
-//     })
-// })
+router.put('/:id', (req, res, next) => {
+    Student.findByIdAndUpdate({_id:req.params.id}, req.body)
+    .then(result => {
+        res.status(200).json({
+            message:'success'
+        })
+    })
+    .catch(err => {
+        res.status(500).json({
+            error:err
+        })
+    })
+})
 
 //DELETE or Delete
 router.delete('/:id', (req, res, next) => {
