@@ -24,70 +24,90 @@ router.post('/', async (req, res, next) => {
                 newStudent: insertStudent
             })
         }
-    }catch (error){
+    }catch (err){
         res.status(500).json({
-            error: error
+            error: err
         })
     }
 });
 
 //GET or Read
-router.get('/', (req, res, next) => {
-    Student.find()
-    .then(result => {
-        res.status(200).json({
-            studentData:result
-        })
-    })
-    .catch(err => {
+router.get('/', async (req, res, next) => {
+    try{
+        const displayStudentsData = await Student.find();
+        if(displayStudentsData){
+            res.status(200).json({
+                studentsData: displayStudentsData
+            })
+        }else{
+            res.send({
+                msg: 'Data not Found'
+            })
+        }
+    }catch(err){
         res.status(500).json({
-            error:err
+            error: err
         })
-    })
+    }
 });
 
-router.get('/:id', (req, res, next) => {
-    Student.findById(req.params.id)
-    .then(result => {
-        res.status(200).json({
-            student:result
-        })
-    })
-    .catch(err => {
+router.get('/:id', async (req, res, next) => {
+    try{
+        const displayStudentInfo = await Student.findById(req.params.id);
+        if(displayStudentInfo){
+            res.status(200).json({
+                studentData: displayStudentInfo
+            })
+        }else{
+            res.send({
+                msg: 'Data not Found'
+            })
+        }
+    }catch(err){
         res.status(500).json({
-            error:err
+            error: err
         })
-    })
+    }
 })
 
 //PUT or Update
-router.put('/:id', (req, res, next) => {
-    Student.findByIdAndUpdate({_id:req.params.id}, req.body)
-    .then(result => {
-        res.status(200).json({
-            message:'success'
-        })
-    })
-    .catch(err => {
+router.put('/:id', async (req, res, next) => {
+    try{
+        const updateStudentInfo = await Student.findByIdAndUpdate({_id: req.params.id}, req.body);
+        if(updateStudentInfo){
+            res.status(200).json({
+                msg: 'Successfully Updated'
+            })
+        }else{
+            res.send({
+                msg: 'Data not Found'
+            })
+        }
+    }catch(err){
         res.status(500).json({
-            error:err
+            error: err
         })
-    })
+    }
 })
 
 //DELETE or Delete
-router.delete('/:id', (req, res, next) => {
-    Student.findByIdAndDelete({_id:req.params.id})
-    .then(result => {
-        res.status(200).json({
-            message:'success'
-        })
-    })
-    .catch(err => {
+router.delete('/:id', async (req, res, next) => {
+    try{
+        const deleteStudentInfo = await Student.findByIdAndDelete({_id: req.params.id});
+        if(deleteStudentInfo){
+            res.status(200).json({
+                msg: 'Successfully Deleted'
+            })
+        }else{
+            res.send({
+                msg: 'Data not Found'
+            })
+        }
+    }catch(err){
         res.status(500).json({
-            error:err
+            error: err
         })
-    })
+    }
 })
 
 module.exports = router;
