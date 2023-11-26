@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../model/user_model');
 
 //POST
-router.post('/', async (req, res) => {
+router.post('/post', async (req, res) => {
     const user = new User({
         user_name: req.body.user_name,
         email: req.body.email,
@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
     }
 });
 //GET All
-router.get('/', async (req, res) => {
+router.get('/get', async (req, res) => {
     try{
         const displayUsersInfo = await User.find();
         if(displayUsersInfo){
@@ -51,7 +51,7 @@ router.get('/', async (req, res) => {
     }
 });
 //GET by ID
-router.get('/:id', async (req, res) => {
+router.get('/get/:id', async (req, res) => {
     try{
         const displayUserInfo = await User.findById(req.params.id);
         if(displayUserInfo){
@@ -70,18 +70,27 @@ router.get('/:id', async (req, res) => {
     }
 });
 //UPDATE
-router.put('/:id', async (req, res) => {
+router.put('/update/:id', async (req, res) => {
     try{
-        const updateUserInfo = await User.findByIdAndUpdate({_id: req.params.id}, req.body);
-        if(updateUserInfo){
-            res.status(200).json({
-                message: 'Update User Successfully'
-            })
+        const searchId = await User.findById(req.params.id);
+        console.log(searchId);
+        if(searchId.email === req.body.email){
+            const updateUserInfo = await User.findByIdAndUpdate({_id: req.params.id}, req.body);
+            if(updateUserInfo){
+                res.status(200).json({
+                    message: 'Update User Successfully'
+                })
+            }else{
+                res.send({
+                    message: 'User not Found for Update'
+                })
+            }
         }else{
             res.send({
-                message: 'User not Found for Update'
+                message: 'Sorry! You can not change your email.'
             })
         }
+        
     }catch (err){
         res.status(500).json({
             error: err
@@ -89,7 +98,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 //DELETE
-router.delete('/:id', async (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
     try{
         const deleteUserInfo = await User.findByIdAndDelete(req.params.id);
         if(deleteUserInfo){

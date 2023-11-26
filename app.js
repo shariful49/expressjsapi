@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 //Set route
 app.get('/', (req, res) => res.render('index'));
-app.use('/api/mongo/user/asdfg', require('./api/mongo/routes/user_routes'));
+app.use('/apiHw7CsI89Fak7w/mongo/user/', require('./api/mongo/routes/user_routes'));
 app.use((req, res, next) => {
     res.status(404).json({
         error: 'Not Found!!!'
