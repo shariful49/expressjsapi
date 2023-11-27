@@ -73,7 +73,6 @@ router.get('/get/:id', async (req, res) => {
 router.put('/update/:id', async (req, res) => {
     try{
         const searchId = await User.findById(req.params.id);
-        console.log(searchId);
         if(searchId.email === req.body.email){
             const updateUserInfo = await User.findByIdAndUpdate({_id: req.params.id}, req.body);
             if(updateUserInfo){
@@ -90,7 +89,6 @@ router.put('/update/:id', async (req, res) => {
                 message: 'Sorry! You can not change your email.'
             })
         }
-        
     }catch (err){
         res.status(500).json({
             error: err
